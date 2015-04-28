@@ -1,0 +1,63 @@
+﻿@model Playground.Mvc.Web.Models.SmsViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div>
+            <br style="clear:both">
+            <div class="form-group col-md-4 ">
+                <label id="messageLabel" for="message">Message </label>
+                <textarea name="@Html.NameFor(m=>m.Message)" class="form-control input-sm " type="textarea" id="message" placeholder="Message" maxlength="140" rows="7"></textarea>
+                <span class="help-block" id="characterLeft">You have reached the limit</span>
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            </div>
+            <br style="clear:both">
+            <div class="form-group col-md-2">
+                <button class="form-control input-sm btn btn-success disabled" id="btnSubmit" name="btnSubmit" type="submit" style="height:35px"> Send</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#characterLeft').text('140 characters left');
+            $('#message').keydown(function () {
+                var max = 140;
+                var len = $(this).val().length;
+                if (len >= max) {
+                    $('#characterLeft').text('You have reached the limit');
+                    $('#characterLeft').addClass('red');
+                    $('#btnSubmit').addClass('disabled');
+                }
+                else {
+                    var ch = max - len;
+                    $('#characterLeft').text(ch + ' characters left');
+                    $('#btnSubmit').removeClass('disabled');
+                    $('#characterLeft').removeClass('red');
+                }
+            });
+        });
+    </script>
+}
+
+@section Styles{
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
+}

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Playground.Mvc.Web.Models.SmsViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="page-header">
+                <h1><small class="pull-right">@Model.Count() messages</small> Messages </h1>
+            </div>
+            <div class="comments-list">
+                @foreach (var item in Model)
+                {
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading user_name">@item.Id</h4>
+                            @Html.Raw(item.Message)
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@section Styles{
+    <style>
+        .user_name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .comments-list .media {
+            border-bottom: 1px dotted #ccc;
+        }
+    </style>
+}

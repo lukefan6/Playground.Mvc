@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Playground.Mvc.Core;
 using Playground.Mvc.Web.Models;
 
 namespace Playground.Mvc.Web.Controllers
@@ -32,9 +32,9 @@ namespace Playground.Mvc.Web.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -331,7 +331,7 @@ namespace Playground.Mvc.Web.Controllers
             base.Dispose(disposing);
         }
 
-#region Helper
+        #region Helper
         // 新增外部登入時用來當做 XSRF 保護
         private const string XsrfKey = "XsrfId";
 
@@ -382,6 +382,6 @@ namespace Playground.Mvc.Web.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }

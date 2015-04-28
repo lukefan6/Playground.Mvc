@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Playground.Mvc.DataModel;
 
-namespace Playground.Mvc.Core
+namespace Playground.Mvc.Core.DataAccess
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -9,6 +10,8 @@ namespace Playground.Mvc.Core
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        public IDbSet<Sms> Sms { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -3,9 +3,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Owin;
-using Playground.Mvc.Web.Models;
+using Playground.Mvc.Core;
+using Playground.Mvc.Core.DataAccess;
+using Playground.Mvc.DataModel;
 
 namespace Playground.Mvc.Web
 {
@@ -18,6 +19,7 @@ namespace Playground.Mvc.Web
             app.CreatePerOwinContext(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<SmsManager>(SmsManager.Create);
 
             // 讓應用程式使用 Cookie 儲存已登入使用者的資訊
             // 並使用 Cookie 暫時儲存使用者利用協力廠商登入提供者登入的相關資訊；
@@ -34,7 +36,7 @@ namespace Playground.Mvc.Web
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // 讓應用程式在雙因素驗證程序中驗證第二個因素時暫時儲存使用者資訊。

@@ -12,6 +12,7 @@ namespace Playground.Mvc.Core.DataAccess
         }
 
         public IDbSet<Sms> Sms { get; set; }
+        public IDbSet<UploadedFile> Files { get; set; }
 
         public static ApplicationDbContext Create()
         {

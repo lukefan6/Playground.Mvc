@@ -1,0 +1,49 @@
+﻿@model IEnumerable<int>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Styles{
+    <style>
+
+        .cover-card {
+            border: 2px solid white;
+            background: silver;
+            padding: 0px;
+            margin: 0px;
+            height: 200px;
+        }
+
+            .cover-card > p {
+                text-align: center;
+                background-color: rgba(6,6,6,0.0);
+                color: rgba(6,6,6,0.0);
+                width: 100%;
+                height: 100%;
+                font-weight: bold;
+                font-size: 20px;
+            }
+
+            .cover-card:hover > p {
+                background-color: rgba(6,6,6,0.3);
+                color: white;
+                text-shadow: 3px 3px 10px #000;
+            }
+    </style>
+}
+
+<p>
+    @Html.ActionLink("Upload", "Upload")
+</p>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach(int id in Model)
+        {
+            <div class="cover-card col-sm-4" style="background: url(@Url.Action("Get",new{id=id})) no-repeat center top; background-size:cover;">
+
+            </div>
+        }
+    </div>
+</div>

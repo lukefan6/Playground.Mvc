@@ -5,6 +5,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Playground.Mvc.Core;
+using Playground.Mvc.Core.Base;
 using Playground.Mvc.Core.DataAccess;
 using Playground.Mvc.DataModel;
 
@@ -20,6 +21,7 @@ namespace Playground.Mvc.Web
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
             app.CreatePerOwinContext<SmsManager>(SmsManager.Create);
+            app.CreatePerOwinContext<FileManager>(BaseManager.Create<FileManager>);
 
             // 讓應用程式使用 Cookie 儲存已登入使用者的資訊
             // 並使用 Cookie 暫時儲存使用者利用協力廠商登入提供者登入的相關資訊；

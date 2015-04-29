@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+}
+
+<h2>Upload</h2>
+
+
+@using (Html.BeginForm("Upload", "Image", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", id = "js-upload-form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>@Html.ValidationSummary(true, "", new { @class = "text-danger" })</strong>
+            </div>
+            <div class="panel-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input type="file" name="image" id="js-upload-files" />
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary" id="js-upload-submit">Upload file</button>
+                </div>
+                <div class="upload-drop-zone" id="drop-zone">
+                    Just drag and drop files here
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function(){
+            // UPLOAD CLASS DEFINITION
+            // ======================
+
+            var dropZone = document.getElementById('drop-zone');
+
+            dropZone.ondrop = function(e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+                document.getElementById('js-upload-files').files = e.dataTransfer.files;
+                document.getElementById('js-upload-form').submit();
+            }
+
+            dropZone.ondragover = function() {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
+
+            dropZone.ondragleave = function() {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
+        });
+    </script>
+}
+
+@section Styles{
+    <style>
+        .upload-drop-zone {
+            height: 200px;
+            border-width: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* skin.css Style*/
+        .upload-drop-zone {
+            color: #ccc;
+            border-style: dashed;
+            border-color: #ccc;
+            line-height: 200px;
+            text-align: center;
+        }
+
+            .upload-drop-zone.drop {
+                color: #222;
+                border-color: #222;
+            }
+    </style>
+}

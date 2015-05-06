@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -58,5 +60,16 @@ namespace Playground.Mvc.Core
         }
 
         #endregion
+
+        public virtual async Task UpdateSelected(int[] selectedIdList)
+        {
+            foreach (var sms in GetAll())
+            {
+                sms.IsSelected = selectedIdList.Any(selectedId => selectedId == sms.Id);
+                Database.Entry<Sms>(sms).State = EntityState.Modified;
+            }
+
+            await Database.SaveChangesAsync();
+        }
     }
 }

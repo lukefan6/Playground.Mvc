@@ -125,6 +125,10 @@
     <Compile Include="EmailService.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Base\HttpPostedFileBaseExtensions.cs" />
+    <Compile Include="Migrations\201505060626188_sms-is-selected.cs" />
+    <Compile Include="Migrations\201505060626188_sms-is-selected.Designer.cs">
+      <DependentUpon>201505060626188_sms-is-selected.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmsManager.cs" />
@@ -138,6 +142,11 @@
       <Project>{518d76af-6d02-416a-8fc4-f4c5c0440b1b}</Project>
       <Name>Playground.Mvc.DataModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201505060626188_sms-is-selected.resx">
+      <DependentUpon>201505060626188_sms-is-selected.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,42 +1,79 @@
 ﻿@model IEnumerable<Playground.Mvc.Web.Models.SmsViewModel>
 
-@{
-    ViewBag.Title = "Index";
-}
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="page-header">
-                <h1><small class="pull-right">@Model.Count() messages</small> Messages </h1>
-            </div>
-            <div class="comments-list">
-                @foreach (var item in Model)
-                {
-                    <div class="media">
-                        <div class="media-body">
-                            <h4 class="media-heading user_name">@item.Id</h4>
-                            @Html.Raw(item.Message)
-                        </div>
-                    </div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                dom: 'T<"clear">lfrtip',
+                order: [1, "asc"],
+                tableTools: {
+                    sRowSelect: "multi",
+                    aButtons: ["select_all", "select_none"]
                 }
-            </div>
-        </div>
-    </div>
-</div>
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+            });
+            $('form').on('submit', function () {
+                var $form = $(this);
+                var oTT = TableTools.fnGetInstance('example');
+                var aData = oTT.fnGetSelectedData();
+                $(aData).each(function () {
+                    var $input = $('<input>', {
+                        type: 'hidden',
+                        name: 'selectedIdList',
+                        value: $(this)[1]
+                    });
+                    $form.append($input);
+                });
+            });
+            $('#example tbody tr').filter(function () {
+                return $(this).data('selected') == true;
+            }).each(function(){
+                TableTools.fnGetInstance('example').fnSelect($(this));
+            });
+        });
+    </script>
+}
 
 @section Styles{
     <style>
-        .user_name {
-            font-size: 14px;
-            font-weight: bold;
+        tr td:first-child {
+            text-align: center;
         }
 
-        .comments-list .media {
-            border-bottom: 1px dotted #ccc;
+            tr td:first-child:before {
+                content: "\f096"; /* fa-square-o */
+                font-family: FontAwesome;
+            }
+
+        tr.selected td:first-child:before {
+            content: "\f046"; /* fa-check-square-o */
         }
     </style>
 }
+<hr />
+<div class="container">
+    @using (Html.BeginForm("UpdateSelected", "Sms", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input class="btn btn-default" type="submit" value="Update" />
+    }
+</div>
+<hr />
+<table id="example" class="table table-hover table-condensed table-responsive">
+    <thead>
+        <tr>
+            <th class="col-md-1"></th>
+            <th class="col-md-1">ID</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {   
+            <tr data-selected="@item.IsSelected.ToString().ToLower()">
+                <td></td>
+                <td>@item.Id</td>
+                <td>@Html.Raw(item.Message)</td>
+            </tr>
+        }
+    </tbody>
+</table>

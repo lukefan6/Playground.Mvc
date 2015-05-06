@@ -14,9 +14,12 @@ namespace Playground.Mvc.Web.Models
                 .Replace("\r\n", "</br>")
                 .Replace("\r", "</br>")
                 .Replace("\n", "</br>");
+            this.IsSelected = sms.IsSelected;
         }
 
         public int Id { get; set; }
+
+        public bool IsSelected { get; set; }
 
         [Required]
         [StringLength(140)]

@@ -8,6 +8,9 @@ namespace Playground.Mvc.DataModel
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        public bool IsSelected { get; set; }
+
         [StringLength(140)]
         public string Message { get; set; }
     }

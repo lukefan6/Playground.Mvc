@@ -53,5 +53,13 @@ namespace Playground.Mvc.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateSelected(int[] selectedIdList)
+        {
+            await SmsManager.UpdateSelected(selectedIdList ?? new int[] { });
+            return RedirectToAction("Index");
+        }
     }
 }

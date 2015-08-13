@@ -1,0 +1,62 @@
+﻿@using Playground.Mvc.Web.Models.Order
+@using Playground.Mvc.Core
+@using Microsoft.AspNet.Identity.Owin
+
+@model CreateNewOrderViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var customerList = Context.GetOwinContext().Get<OrderManager>().CustomerList.Select(value => new SelectListItem
+    {
+        Text = value,
+        Value = value
+    });
+}
+
+@section styles{
+    <link href="~/Content/bootstrap-combobox.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Scripts.Render("jqueryval")
+    <script src="~/Scripts/bootstrap-combobox.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#@Html.IdFor(model=>model.CustomerId)').combobox();
+        });
+    </script>
+}
+
+<h2>Create New Order</h2>
+<div class="row">
+    <div class="col-md-8">
+        <div class="form-horizontal">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CustomerId, "Customer ID", htmlAttributes: new { @class = "col-md-4 col-sm-5 col-xs-12 control-label" })
+                    <div class="col-xs-12 col-sm-7 col-md-8 form-input">
+                        @Html.DropDownListFor(model => model.CustomerId, customerList, "Select a Customer", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.PurchaseOrderId, htmlAttributes: new { @class = "col-md-4 col-sm-5 col-xs-12 control-label" })
+                    <div class="col-xs-12 col-sm-7 col-md-8 form-input">
+                        @Html.EditorFor(model => model.PurchaseOrderId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.PurchaseOrderId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-7 col-md-offset-4 col-md-8 col-xs-12 form-input">
+                        <input type="submit" class="btn btn-success ladda-button" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

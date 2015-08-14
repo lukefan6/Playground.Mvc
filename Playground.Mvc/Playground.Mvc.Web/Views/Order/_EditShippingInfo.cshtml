@@ -1,0 +1,51 @@
+﻿@model ShippingInfo
+@using Playground.Mvc.Web.Models.Order
+
+@{
+    if (!Model.ShipDate.HasValue)
+    {
+        Model.ShipDate = DateTime.Today;
+    }
+}
+
+<div class="form-horizontal">
+    <h4>ShippingInfo</h4>
+    <hr />
+    @Html.HiddenForOrderViewModel(model => model.ViewModelId)
+
+    <div class="form-group">
+        @Html.LabelForOrderViewModel(model => model.ShippingType, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListForOrderViewModel(model => model.ShippingType, "Select ship type...", new { @class = "form-control" })
+            @Html.ValidationMessageForOrderViewModel(model => model.ShippingType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelForOrderViewModel(model => model.ShippingMethod, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListForOrderViewModel(
+                model => model.ShippingMethod,
+                "Select shipping method...",
+                new { @class = "form-control", onchange = "onShippingMethodChanged($(this))" },
+                excludeZeroValue: false)
+            @Html.ValidationMessageForOrderViewModel(model => model.ShippingMethod, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group other-method" style="@(Model.ShippingMethod==ShipMethod.Other? "": "display:none")">
+        @Html.LabelForOrderViewModel(model => model.OtherMethod, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxForOrderViewModel(model => model.OtherMethod, new { @class = "form-control" })
+            @Html.ValidationMessageForOrderViewModel(model => model.OtherMethod, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelForOrderViewModel(model => model.ShipDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxForOrderViewModel(model => model.ShipDate, new { @class = "form-control", @type = "date" })
+            @Html.ValidationMessageForOrderViewModel(model => model.ShipDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>

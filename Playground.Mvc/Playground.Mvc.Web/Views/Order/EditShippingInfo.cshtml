@@ -1,0 +1,68 @@
+﻿@using Playground.Mvc.Web.Models.Order
+@model ShippingInfoViewModel
+
+@{
+    ViewBag.Title = "EditShippingInfo";
+}
+
+@section styles{
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#add-address').click(function () {
+                var newDiv = $('<div></div>');
+                $("#address-input-area").append(newDiv);
+                newDiv.load('@Url.Action("EditShippingInfoPartial")');                
+            });
+        });
+
+        function onShippingMethodChanged($shippingMethod) {
+            var $otherMethod = $shippingMethod.closest('.form-horizontal').find('.other-method');
+            if ($shippingMethod.val() === "@ShipMethod.Other.ToString()") {                
+                $otherMethod.show();
+            } else {
+                $otherMethod.hide();
+            }            
+        }
+    </script>
+}
+
+<h2>EditShippingInfo</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div id="address-input-area">
+        @foreach (var model in Model.ShippingInfo.Values)
+        {
+            Html.RenderPartial("_EditShippingInfo", model);
+        }
+
+        @if (Model.ShippingInfo.Count == 0)
+        {
+            Html.RenderPartial("_EditShippingInfo", new ShippingInfo());
+        }
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-12 add_address_btn">
+            <a id="add-address" class="btn btn-info"><i class="fa fa-plus"></i> Add Ship Information</a>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <button type="submit" class="btn btn-success ladda-button" data-style="expand-right">
+                Next Step <i class="fa fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+}
+
+
+

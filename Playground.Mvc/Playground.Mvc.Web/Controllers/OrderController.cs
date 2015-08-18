@@ -57,5 +57,13 @@ namespace Playground.Mvc.Web.Controllers
 
             return RedirectToAction("EditShippingInfo");
         }
+
+        [HttpGet]
+        public ActionResult AddProducts()
+        {
+            var model = Session[typeof(AddProductsViewModel).FullName] as AddProductsViewModel;
+
+            return View(model ?? new AddProductsViewModel());
+        }
     }
 }

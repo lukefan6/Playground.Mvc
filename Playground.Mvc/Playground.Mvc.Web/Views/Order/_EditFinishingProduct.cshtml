@@ -1,0 +1,44 @@
+﻿@model FinishingProduct
+@using Playground.Mvc.Web.Models.Order
+@using Playground.Mvc.Core
+@using Microsoft.AspNet.Identity.Owin
+
+@{
+    var selectList = Context.GetOwinContext().Get<OrderManager>().CustomerList.Select(value => new SelectListItem
+    {
+        Text = value,
+        Value = value
+    });
+
+    var art = new ProductArtInfo();
+    Model.ProductArtInfo.Add(art.ViewModelId, art);
+}
+
+<div class="form-horizontal">
+    <h4>FinishingProduct</h4>
+    <hr />
+    @Html.HiddenForOrderViewModel(model => model.ViewModelId)
+    <div class="form-group">
+        @Html.LabelForOrderViewModel(model => model.ProductInfoId,
+            htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxForOrderViewModel(model => model.ProductInfoId, new { @class = "form-control-static" })
+        </div>
+    </div>
+
+    @if (selectList.Any())
+    {
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.DropDownList("test", selectList, new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success" onclick="onAddButtonClicked($(this),'@Model.ViewModelId');">
+                    Add
+                </button>
+            </div>
+        </div>
+        
+        Html.RenderDictionaryItem("_EditProductArtInfo", m => m.ProductArtInfo, art.ViewModelId);
+    }
+</div>

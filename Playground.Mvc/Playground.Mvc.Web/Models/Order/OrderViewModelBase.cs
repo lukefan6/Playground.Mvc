@@ -15,5 +15,13 @@ namespace Playground.Mvc.Web.Models.Order
             }
             set { viewModelId = Guid.Parse(value); }
         }
+
+        private string dictionaryRepresentationPrefix;
+
+        public string DictionaryRepresentationPrefix
+        {
+            get { return dictionaryRepresentationPrefix ?? GetType().Name; }
+            set { dictionaryRepresentationPrefix = value; }
+        }
     }
 }

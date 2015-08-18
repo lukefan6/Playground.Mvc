@@ -1,0 +1,15 @@
+﻿@model AddProductsViewModel
+           @using Playground.Mvc.Web.Models.Order
+
+@{
+    ViewBag.Title = "AddProducts";
+    var product = new FinishingProduct();
+    Model.FinishingProduct.Add(product.ViewModelId, product);
+}
+
+<h2>AddProducts</h2>
+
+@{
+    Html.RenderDictionaryItem("_EditFinishingProduct", m => m.FinishingProduct, product.ViewModelId);
+}
+

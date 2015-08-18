@@ -1,0 +1,19 @@
+﻿@model ProductArtInfo
+@using Playground.Mvc.Web.Models.Order
+
+<div class="form-horizontal">
+    <h4>ProductArtInfo</h4>
+    <hr />
+    @Html.HiddenForOrderViewModel(model => model.ViewModelId)
+    @Html.HiddenForOrderViewModel(model => model.ServiceId)
+
+    <div class="form-group">
+        @Html.LabelForOrderViewModel(model => model.ArtDescription,
+            htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxForOrderViewModel(model => model.ArtDescription, new { @class = "form-control" })
+            @Html.ValidationMessageForOrderViewModel(model => model.ArtDescription,
+                "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,6 +10,29 @@ namespace Playground.Mvc.Web.Models.Order
 {
     public static class HtmlHelperExtensions
     {
+        public static void RenderDictionaryItem<TModel, TValue>(
+            this HtmlHelper<TModel> htmlHelper,
+            string partialViewName,
+            Expression<Func<TModel, IDictionary<string, TValue>>> expression,
+            string dictionaryKey)
+            where TValue : OrderViewModelBase
+        {
+            string memberName = expression.ToMemberExpression().Member.Name;
+            var parent = htmlHelper.ViewData.Model;
+            var model = expression.Compile().Invoke(parent)[dictionaryKey];
+            model.DictionaryRepresentationPrefix = memberName;
+
+            if (parent is OrderViewModelBase)
+            {
+                model.DictionaryRepresentationPrefix = string.Format("{0}[{1}].{2}",
+                    (parent as OrderViewModelBase).DictionaryRepresentationPrefix,
+                    (parent as OrderViewModelBase).ViewModelId,
+                    model.DictionaryRepresentationPrefix);
+            }
+
+            htmlHelper.RenderPartial(partialViewName, model);
+        }
+
         public static MvcHtmlString TextBoxForOrderViewModel<TModel, TValue>(
             this HtmlHelper<TModel> html,
             Expression<Func<TModel, TValue>> expression,
@@ -91,10 +115,10 @@ namespace Playground.Mvc.Web.Models.Order
             this HtmlHelper<TModel> html,
             Expression<Func<TModel, TValue>> expression) where TModel : OrderViewModelBase
         {
-            var shippingInfo = html.ViewData.Model;
+            var model = html.ViewData.Model;
 
-            string prefix = shippingInfo.GetType().Name;
-            string id = shippingInfo.ViewModelId.ToString();
+            string prefix = model.DictionaryRepresentationPrefix;
+            string id = model.ViewModelId.ToString();
             string memberName = expression.ToMemberExpression().Member.Name;
 
             return string.Format("{0}[{1}].{2}", prefix, id, memberName);

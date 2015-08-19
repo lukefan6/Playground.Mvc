@@ -12,7 +12,8 @@ namespace Playground.Mvc.Web.Models.Order
         public static bool ValidateDictionaryItems<TModel, TValue>(
             ModelStateDictionary modelState,
             TModel model,
-            Expression<Func<TModel, IDictionary<string, TValue>>> itemSelection) where TValue : OrderViewModelBase
+            Expression<Func<TModel, IDictionary<string, TValue>>> itemSelection)
+            where TValue : OrderViewModelBase
         {
             modelState.Clear();
 
@@ -22,7 +23,8 @@ namespace Playground.Mvc.Web.Models.Order
 
                 foreach (var validationResult in validationResults)
                 {
-                    string prefix = itemSelection.ToMemberExpression().Member.Name;
+                    string prefix = item.DictionaryRepresentationPrefix
+                        ?? itemSelection.ToMemberExpression().Member.Name;
                     string id = item.ViewModelId.ToString();
                     string memberName = validationResult.MemberNames.First();
 

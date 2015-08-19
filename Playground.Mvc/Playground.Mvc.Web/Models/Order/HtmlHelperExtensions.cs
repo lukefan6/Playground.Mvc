@@ -47,16 +47,20 @@ namespace Playground.Mvc.Web.Models.Order
         public static MvcHtmlString LabelForOrderViewModel<TModel, TValue>(
             this HtmlHelper<TModel> html,
             Expression<Func<TModel, TValue>> expression,
-            object htmlAttributes) where TModel : OrderViewModelBase
+            string labelText = null,
+            object htmlAttributes = null) where TModel : OrderViewModelBase
         {
             var displayAttribute = expression.ToMemberExpression().Member
                 .GetCustomAttributes(typeof(DisplayAttribute), false)
                 .Cast<DisplayAttribute>()
                 .FirstOrDefault();
 
-            string labelText = (displayAttribute == null)
+            if (labelText == null)
+            {
+                labelText = (displayAttribute == null)
                 ? expression.ToMemberExpression().Member.Name
                 : displayAttribute.Name;
+            }
 
             return html.Label(html.GetDictionaryRepresentation(expression), labelText, htmlAttributes);
         }
@@ -140,7 +144,7 @@ namespace Playground.Mvc.Web.Models.Order
                 result = string.Format(displayFormatAttribute.DataFormatString, result);
             }
 
-            return result as string;
+            return Convert.ToString(result);
         }
 
         public static MemberExpression ToMemberExpression<T>(this Expression<T> expression)

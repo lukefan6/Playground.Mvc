@@ -4,41 +4,52 @@
 @using Microsoft.AspNet.Identity.Owin
 
 @{
-    var selectList = Context.GetOwinContext().Get<OrderManager>().CustomerList.Select(value => new SelectListItem
+    var selectList = Enumerable.Range(1,10).Select(value => new SelectListItem
     {
-        Text = value,
-        Value = value
+        Text = value.ToString(),
+        Value = value.ToString()
     });
 
-    var art = new ProductArtInfo();
-    Model.ProductArtInfo.Add(art.ViewModelId, art);
+    //var art = new ProductArtInfo();
+    //Model.ProductArtInfo.Add(art.ViewModelId, art);
 }
 
 <div class="form-horizontal">
     <h4>FinishingProduct</h4>
     <hr />
     @Html.HiddenForOrderViewModel(model => model.ViewModelId)
+    @Html.HiddenForOrderViewModel(model=>model.ProductInfoId)
     <div class="form-group">
         @Html.LabelForOrderViewModel(model => model.ProductInfoId,
             htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxForOrderViewModel(model => model.ProductInfoId, new { @class = "form-control-static" })
+            @Html.TextBoxForOrderViewModel(model => model.ProductInfoId, new { @disabled = "disabled", @class="form-control" })
         </div>
     </div>
 
     @if (selectList.Any())
     {
+        string parentPrefix = string.Format("{0}[{1}].{2}",
+            Model.DictionaryRepresentationPrefix,
+            Model.ViewModelId,
+            Html.NameFor(m=>m.ProductArtInfo));
         <div class="form-group">
-            <div class="col-md-10">
-                @Html.DropDownList("test", selectList, new { @class = "form-control" })
+            <div class="col-md-offset-2 col-md-8">
+                @Html.DropDownList("serviceId", selectList, new { @class = "form-control" })
             </div>
             <div class="col-md-2">
-                <button class="btn btn-success" onclick="onAddButtonClicked($(this),'@Model.ViewModelId');">
-                    Add
-                </button>
+                <a class="btn btn-success" 
+                   onclick="onAddServiceClicked($(this), '@parentPrefix');">
+                    Add Service
+                </a>
             </div>
         </div>
-        
-        Html.RenderDictionaryItem("_EditProductArtInfo", m => m.ProductArtInfo, art.ViewModelId);
     }
+    
+    <div class="product-art-info">
+        @foreach(string key in Model.ProductArtInfo.Keys)
+        {
+            Html.RenderDictionaryItem("_EditProductArtInfo", m => m.ProductArtInfo, key);
+        }
+    </div>
 </div>

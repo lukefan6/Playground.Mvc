@@ -65,5 +65,49 @@ namespace Playground.Mvc.Web.Controllers
 
             return View(model ?? new AddProductsViewModel());
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult EditFinishingProductPartial(string productInfoId, string parentPrefix)
+        {
+            return PartialView("_EditFinishingProduct", new FinishingProduct
+            {
+                ProductInfoId = productInfoId,
+                DictionaryRepresentationPrefix = parentPrefix
+            });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult EditProductArtInfoPartial(int? serviceId, string parentPrefix)
+        {
+            return PartialView("_EditProductArtInfo", new ProductArtInfo
+            {
+                ServiceId = serviceId,
+                DictionaryRepresentationPrefix = parentPrefix
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddProducts(AddProductsViewModel model)
+        {
+            if (!ValidationHelper.ValidateDictionaryItems(ModelState, model, x => x.FinishingProduct))
+            {
+                return View(model);
+            }
+
+            if (!model.FinishingProduct.Values.All(x =>
+            {
+                return ValidationHelper.ValidateDictionaryItems(ModelState, x, y => y.ProductArtInfo);
+            }))
+            {
+                return View(model);
+            }
+
+            Session[model.GetType().FullName] = model;
+
+            return RedirectToAction("AddProducts");
+        }
     }
 }

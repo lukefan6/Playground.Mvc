@@ -4,6 +4,13 @@ namespace Playground.Mvc.Core
 {
     public class OrderManager : BaseManager
     {
-        public readonly string[] CustomerList = new string[] { "howwayla", "kobe_lu", "janetp" };
+        public readonly string[] CustomerList = new string[] {
+            "AllenIverson",
+            "KobeBryant",
+            "LeBronJames",
+            "TracyMcGrady",
+            "VinceCarter",
+            "RayAllen"
+        };
     }
 }

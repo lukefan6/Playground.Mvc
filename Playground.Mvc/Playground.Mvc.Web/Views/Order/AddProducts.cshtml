@@ -1,15 +1,68 @@
 ﻿@model AddProductsViewModel
-           @using Playground.Mvc.Web.Models.Order
+@using Playground.Mvc.Web.Models.Order
+@using Playground.Mvc.Core
+@using Microsoft.AspNet.Identity.Owin
 
 @{
     ViewBag.Title = "AddProducts";
-    var product = new FinishingProduct();
-    Model.FinishingProduct.Add(product.ViewModelId, product);
+    var selectList = Context.GetOwinContext().Get<OrderManager>().CustomerList.Select(value => new SelectListItem
+    {
+        Text = value,
+        Value = value
+    });
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#add-product').click(function () {
+                var newDiv = $('<div></div>');
+                $("#product-input-area").append(newDiv);
+                newDiv.load('@Url.Action("EditFinishingProductPartial")?'
+                    + 'productInfoId=' + $('#productIdToAdd').val()
+                    + '&parentPrefix=' + '@Html.NameFor(m=>m.FinishingProduct)');
+            });
+        });
+
+        function onAddServiceClicked($button, parentPrefix) {
+            var serviceId = $button.closest('.form-group').find('select[name=serviceId]').val();
+            var newDiv = $('<div></div>');
+            $button.closest('.form-horizontal').find('.product-art-info').append(newDiv);
+            newDiv.load('@Url.Action("EditProductArtInfoPartial")?'
+                + 'serviceId=' + serviceId
+                + '&parentPrefix=' + parentPrefix);
+        }
+    </script>
 }
 
 <h2>AddProducts</h2>
 
-@{
-    Html.RenderDictionaryItem("_EditFinishingProduct", m => m.FinishingProduct, product.ViewModelId);
-}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div id="product-input-area">
+            @foreach (string key in Model.FinishingProduct.Keys)
+            {
+                Html.RenderDictionaryItem("_EditFinishingProduct", m => m.FinishingProduct, key);
+            }
+        </div>
 
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-8">
+                @Html.DropDownList("productIdToAdd", selectList, new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <a id="add-product" class="btn btn-info"><i class="fa fa-plus"></i> Add Product</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </div>
+}
